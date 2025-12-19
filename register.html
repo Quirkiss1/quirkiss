@@ -1,1 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - DroneDelivery</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo" style="text-decoration: none; color: inherit;">
+                    <span class="logo-icon">🚁</span>
+                    <span class="logo-text">DroneDelivery</span>
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="index.html#about">О нас</a></li>
+                    <li><a href="index.html#contact">Контакты</a></li>
+                </ul>
+                <a href="login.html" class="btn-secondary">Войти</a>
+            </div>
+        </div>
+    </nav>
+
+    
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-wrapper">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h1 class="auth-title">Регистрация</h1>
+                        <p class="auth-subtitle">Создайте аккаунт для быстрой доставки</p>
+                    </div>
+
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="full_name">Полное имя *</label>
+                            <input type="text" id="full_name" name="full_name" placeholder="Иван Иванов" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Телефон *</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+7 (999) 123-45-67" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Пароль *</label>
+                            <input type="password" id="password" name="password" placeholder="Минимум 6 символов" required minlength="6">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="default_delivery_city">Город</label>
+                            <input type="text" id="default_delivery_city" name="default_delivery_city" placeholder="Москва">
+                        </div>
+
+                        <div id="errorMessage" class="error-message" style="display: none;"></div>
+                        <div id="successMessage" class="success-message" style="display: none;"></div>
+
+                        <button type="submit" class="btn-primary btn-large btn-full">Зарегистрироваться</button>
+                    </form>
+
+                    <div class="auth-footer">
+                        <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        
+        window.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                if (!response.ok) {
+                    console.warn('API сервер может быть недоступен');
+                }
+            } catch (error) {
+                console.error('Не удалось подключиться к API:', error);
+                const errorMsg = document.getElementById('errorMessage');
+                if (errorMsg) {
+                    errorMsg.textContent = '⚠️ Внимание: API сервер недоступен. Убедитесь, что бэкенд запущен на ' + API_URL;
+                    errorMsg.style.display = 'block';
+                    errorMsg.style.background = '#fef3c7';
+                    errorMsg.style.color = '#92400e';
+                }
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const errorMsg = document.getElementById('errorMessage');
+            const successMsg = document.getElementById('successMessage');
+            const submitBtn = document.querySelector('button[type="submit"]');
+            
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Регистрация...';
+
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const fullName = document.getElementById('full_name').value.trim();
+            const password = document.getElementById('password').value;
+            const city = document.getElementById('default_delivery_city').value.trim();
+
+            if (!email || !phone || !fullName || !password) {
+                errorMsg.textContent = 'Пожалуйста, заполните все обязательные поля';
+                errorMsg.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Зарегистрироваться';
+                return;
+            }
+
+            if (password.length < 6) {
+                errorMsg.textContent = 'Пароль должен содержать минимум 6 символов';
+                errorMsg.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Зарегистрироваться';
+                return;
+            }
+
+            const formData = {
+                email: email,
+                phone: phone,
+                full_name: fullName,
+                password: password
+            };
+
+            if (city) {
+                formData.default_delivery_city = city;
+            }
+
+            try {
+                console.log('Отправка запроса регистрации...', formData);
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                console.log('Ответ получен:', response.status, response.statusText);
+
+                let data;
+                try {
+                    const text = await response.text();
+                    console.log('Текст ответа:', text);
+                    data = text ? JSON.parse(text) : {};
+                } catch (e) {
+                    console.error('Ошибка парсинга JSON:', e);
+                    data = { detail: 'Ошибка сервера: неверный формат ответа' };
+                }
+
+                if (response.ok) {
+                    console.log('✅ Регистрация успешна, данные:', data);
+                    successMsg.textContent = 'Регистрация успешна! Выполняется вход...';
+                    successMsg.style.display = 'block';
+                    
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    try {
+                        console.log('🔐 Попытка автоматического входа...');
+                        const loginController = new AbortController();
+                        const loginTimeoutId = setTimeout(() => loginController.abort(), 10000);
+                        
+                        const loginResponse = await fetch(`${API_URL}/auth/login`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                email: email,
+                                password: password
+                            }),
+                            signal: loginController.signal
+                        });
+                        
+                        clearTimeout(loginTimeoutId);
+                        console.log('Ответ входа:', loginResponse.status);
+
+                        let loginData;
+                        try {
+                            const loginText = await loginResponse.text();
+                            console.log('Текст ответа входа:', loginText);
+                            loginData = loginText ? JSON.parse(loginText) : {};
+                        } catch (e) {
+                            console.error('Ошибка парсинга JSON входа:', e);
+                            loginData = {};
+                        }
+
+                        if (loginResponse.ok && loginData.access_token) {
+                            localStorage.setItem('access_token', loginData.access_token);
+                            successMsg.textContent = 'Регистрация успешна! Перенаправление в личный кабинет...';
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Зарегистрироваться';
+                            setTimeout(() => {
+                                window.location.href = 'profile.html';
+                            }, 1000);
+                        } else {
+                            console.warn('Автоматический вход не удался:', loginData);
+                            successMsg.textContent = 'Регистрация успешна! Перенаправление на страницу входа...';
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Зарегистрироваться';
+                            setTimeout(() => {
+                                window.location.href = 'login.html';
+                            }, 2000);
+                        }
+                    } catch (loginError) {
+                        console.error('❌ Ошибка автоматического входа:', loginError);
+                        let errorText = 'Регистрация успешна! ';
+                        if (loginError.name === 'AbortError') {
+                            errorText += 'Вход не выполнен (таймаут). ';
+                        }
+                        errorText += 'Перенаправление на страницу входа...';
+                        successMsg.textContent = errorText;
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Зарегистрироваться';
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    }
+                } else {
+                    let errorText = 'Ошибка при регистрации';
+                    if (data.detail) {
+                        if (typeof data.detail === 'string') {
+                            errorText = data.detail;
+                        } else if (Array.isArray(data.detail)) {
+                            errorText = data.detail.map(err => {
+                                if (typeof err === 'object' && err.msg) {
+                                    return err.msg;
+                                }
+                                return String(err);
+                            }).join(', ');
+                        } else {
+                            errorText = String(data.detail);
+                        }
+                    } else if (data.message) {
+                        errorText = data.message;
+                    } else {
+                        errorText = `Ошибка ${response.status}: ${response.statusText}`;
+                    }
+                    
+                    errorMsg.textContent = errorText;
+                    errorMsg.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Зарегистрироваться';
+                    
+                    console.error('Ошибка регистрации:', {
+                        status: response.status,
+                        statusText: response.statusText,
+                        data: data
+                    });
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                
+                let errorText = 'Ошибка подключения к серверу. ';
+                if (error.name === 'AbortError') {
+                    errorText += 'Превышено время ожидания ответа. ';
+                } else {
+                    errorText += error.message + '. ';
+                }
+                errorText += 'Убедитесь, что бэкенд запущен на ' + API_URL;
+                
+                errorMsg.textContent = errorText;
+                errorMsg.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Зарегистрироваться';
+            }
+        });
+
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
+
 
