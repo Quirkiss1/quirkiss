@@ -1,1 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог - DroneDelivery</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo" style="text-decoration: none; color: inherit;">
+                    <span class="logo-icon">🚁</span>
+                    <span class="logo-text">DroneDelivery</span>
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="profile.html" id="profileLink" style="display: none;">Личный кабинет</a></li>
+                    <li><a href="index.html#contact">Контакты</a></li>
+                </ul>
+                <a href="login.html" id="loginLink" class="btn-secondary">Войти</a>
+                <button id="logoutBtn" class="btn-secondary" style="display: none;">Выйти</button>
+            </div>
+        </div>
+    </nav>
+
+    
+    <section class="catalog-hero">
+        <div class="container">
+            <div class="catalog-header">
+                <h1 class="catalog-title">Каталог доставки</h1>
+                <p class="catalog-subtitle">Выберите категорию для оформления заказа</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="catalog-section">
+        <div class="container">
+            <div class="catalog-grid">
+                <a href="order.html?category=food" class="catalog-card">
+                    <div class="catalog-card-icon">🍕</div>
+                    <h2 class="catalog-card-title">Еда</h2>
+                    <p class="catalog-card-description">
+                        Горячая еда из ресторанов, фастфуд, напитки. 
+                        Доставка в течение 30 минут.
+                    </p>
+                    <div class="catalog-card-footer">
+                        <span class="catalog-card-price">от 199 ₽</span>
+                        <span class="catalog-card-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="order.html?category=medicine" class="catalog-card">
+                    <div class="catalog-card-icon">💊</div>
+                    <h2 class="catalog-card-title">Лекарства</h2>
+                    <p class="catalog-card-description">
+                        Срочная доставка медикаментов и медицинских товаров. 
+                        Круглосуточно.
+                    </p>
+                    <div class="catalog-card-footer">
+                        <span class="catalog-card-price">от 399 ₽</span>
+                        <span class="catalog-card-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="order.html?category=parcels" class="catalog-card">
+                    <div class="catalog-card-icon">📦</div>
+                    <h2 class="catalog-card-title">Посылки</h2>
+                    <p class="catalog-card-description">
+                        Быстрая доставка посылок до 5 кг в любую точку города. 
+                        Надежная упаковка.
+                    </p>
+                    <div class="catalog-card-footer">
+                        <span class="catalog-card-price">от 299 ₽</span>
+                        <span class="catalog-card-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="order.html?category=tech" class="catalog-card">
+                    <div class="catalog-card-icon">📱</div>
+                    <h2 class="catalog-card-title">Техника</h2>
+                    <p class="catalog-card-description">
+                        Безопасная доставка электроники и хрупких товаров. 
+                        Специальная упаковка.
+                    </p>
+                    <div class="catalog-card-footer">
+                        <span class="catalog-card-price">от 499 ₽</span>
+                        <span class="catalog-card-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="order.html?category=gifts" class="catalog-card">
+                    <div class="catalog-card-icon">🎁</div>
+                    <h2 class="catalog-card-title">Подарки</h2>
+                    <p class="catalog-card-description">
+                        Специальная доставка подарков с красивой упаковкой. 
+                        Сделайте сюрприз близким.
+                    </p>
+                    <div class="catalog-card-footer">
+                        <span class="catalog-card-price">от 599 ₽</span>
+                        <span class="catalog-card-arrow">→</span>
+                    </div>
+                </a>
+
+                <a href="order.html?category=documents" class="catalog-card">
+                    <div class="catalog-card-icon">📄</div>
+                    <h2 class="catalog-card-title">Документы</h2>
+                    <p class="catalog-card-description">
+                        Экспресс-доставка важных документов и писем. 
+                        Гарантия сохранности.
+                    </p>
+                    <div class="catalog-card-footer">
+                        <span class="catalog-card-price">от 149 ₽</span>
+                        <span class="catalog-card-arrow">→</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <span class="logo-icon">🚁</span>
+                        <span class="logo-text">DroneDelivery</span>
+                    </div>
+                    <p class="footer-description">
+                        Современная доставка дронами по всей стране. 
+                        Быстро, безопасно, экологично.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Услуги</h4>
+                    <ul class="footer-links">
+                        <li><a href="catalog.html">Еда</a></li>
+                        <li><a href="catalog.html">Лекарства</a></li>
+                        <li><a href="catalog.html">Посылки</a></li>
+                        <li><a href="catalog.html">Техника</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Компания</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#about">О нас</a></li>
+                        <li><a href="index.html#how-it-works">Как это работает</a></li>
+                        <li><a href="index.html#contact">Контакты</a></li>
+                        <li><a href="#">Карьера</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Поддержка</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Помощь</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Условия использования</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 DroneDelivery. Все права защищены.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link">📘</a>
+                    <a href="#" class="social-link">📷</a>
+                    <a href="#" class="social-link">🐦</a>
+                    <a href="#" class="social-link">💼</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            document.getElementById('loginLink').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            document.getElementById('profileLink').style.display = 'inline-block';
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('access_token');
+            window.location.href = 'index.html';
+        });
+
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
+
 
